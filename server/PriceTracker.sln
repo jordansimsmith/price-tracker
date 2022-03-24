@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriceTracker.Api", "src\PriceTracker.Api\PriceTracker.Api.csproj", "{BD93B767-1DA4-4179-B92C-DD9CB723416B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriceTracker.Core", "src\PriceTracker.Core\PriceTracker.Core.csproj", "{68AFB549-65C6-4658-A67B-316309DF6245}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriceTracker.Infrastructure", "src\PriceTracker.Infrastructure\PriceTracker.Infrastructure.csproj", "{111EF97A-DDC8-4ACD-B245-24372C6C6BB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PriceTracker.Test", "test\PriceTracker.Test\PriceTracker.Test.csproj", "{5342FB96-1B81-4FF4-95F4-DD1FC5228656}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BD93B767-1DA4-4179-B92C-DD9CB723416B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD93B767-1DA4-4179-B92C-DD9CB723416B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD93B767-1DA4-4179-B92C-DD9CB723416B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD93B767-1DA4-4179-B92C-DD9CB723416B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68AFB549-65C6-4658-A67B-316309DF6245}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68AFB549-65C6-4658-A67B-316309DF6245}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68AFB549-65C6-4658-A67B-316309DF6245}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68AFB549-65C6-4658-A67B-316309DF6245}.Release|Any CPU.Build.0 = Release|Any CPU
+		{111EF97A-DDC8-4ACD-B245-24372C6C6BB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{111EF97A-DDC8-4ACD-B245-24372C6C6BB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{111EF97A-DDC8-4ACD-B245-24372C6C6BB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{111EF97A-DDC8-4ACD-B245-24372C6C6BB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5342FB96-1B81-4FF4-95F4-DD1FC5228656}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5342FB96-1B81-4FF4-95F4-DD1FC5228656}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5342FB96-1B81-4FF4-95F4-DD1FC5228656}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5342FB96-1B81-4FF4-95F4-DD1FC5228656}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
