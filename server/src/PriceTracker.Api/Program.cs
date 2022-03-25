@@ -1,3 +1,5 @@
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
 using PriceTracker.Core.Models;
 using PriceTracker.Infrastructure;
@@ -22,11 +24,25 @@ builder.Services.Configure<TrackingTargetConfiguration>(options =>
         .ToArray();
 });
 
+builder.Services.AddHangfireContext(builder.Configuration.GetConnectionString("PriceTrackerHangfire"));
+builder.Services.AddHangfire(configuration =>
+{
+    configuration
+        .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+        .UseSimpleAssemblyNameTypeSerializer()
+        .UseRecommendedSerializerSettings()
+        .UsePostgreSqlStorage(builder.Configuration.GetConnectionString("PriceTrackerHangfire"));
+});
+builder.Services.AddHangfireServer();
+
 var app = builder.Build();
 
 using var scope = app.Services.CreateScope();
-await using var context = scope.ServiceProvider.GetService<PriceTrackerContext>();
-await context!.Database.MigrateAsync();
+await using var priceTrackerContext = scope.ServiceProvider.GetService<PriceTrackerContext>();
+await priceTrackerContext!.Database.MigrateAsync();
+
+await using var hangfireContext = scope.ServiceProvider.GetService<HangfireContext>();
+await hangfireContext!.Database.EnsureCreatedAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -38,6 +54,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    IsReadOnlyFunc = _ => !app.Environment.IsDevelopment()
+});
 
 app.MapControllers();
 

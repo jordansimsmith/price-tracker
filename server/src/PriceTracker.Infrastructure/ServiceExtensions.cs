@@ -14,6 +14,13 @@ public static class ServiceExtensions
         return services;
     }
 
+    public static IServiceCollection AddHangfireContext(this IServiceCollection services, string connectionString)
+    {
+        services.AddDbContext<HangfireContext>(options => options.UseNpgsql(connectionString));
+        
+        return services;
+    }
+
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
     {
         // services.AddScoped<ChemistWarehousePriceScraper>();
