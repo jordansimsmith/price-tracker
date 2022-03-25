@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddPriceTrackerContext(builder.Configuration.GetConnectionString("PriceTracker"));
+builder.Services.AddInfrastructureServices();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
