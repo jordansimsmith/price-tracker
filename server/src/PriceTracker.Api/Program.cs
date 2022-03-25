@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using PriceTracker.Core.Models;
 using PriceTracker.Infrastructure;
 using PriceTracker.Infrastructure.Data;
 
@@ -11,6 +12,15 @@ builder.Services.AddInfrastructureServices();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.Configure<TrackingTargetConfiguration>(options =>
+{
+    options.TrackingTargets = builder.Configuration
+        .GetSection("TrackingTargets")
+        .GetChildren()
+        .Select(c => c.Get<TrackingTargetModel>())
+        .ToArray();
+});
 
 var app = builder.Build();
 
