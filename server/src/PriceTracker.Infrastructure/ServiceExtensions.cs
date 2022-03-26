@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using PriceTracker.Core;
+using PriceTracker.Core.Interfaces;
 using PriceTracker.Infrastructure.Data;
 using PriceTracker.Infrastructure.Scraping;
 
@@ -23,8 +25,8 @@ public static class ServiceExtensions
 
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
     {
-        // services.AddScoped<ChemistWarehousePriceScraper>();
-        
+        services.AddScoped<IPriceScraperFactory, PriceScraperFactory>();
+
         return services;
     }
 }

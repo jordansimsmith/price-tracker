@@ -15,14 +15,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.Configure<TrackingTargetConfiguration>(options =>
-{
-    options.TrackingTargets = builder.Configuration
-        .GetSection("TrackingTargets")
-        .GetChildren()
-        .Select(c => c.Get<TrackingTargetModel>())
-        .ToArray();
-});
+var trackingTargets = builder.Configuration
+    .GetSection("TrackingTargets")
+    .GetChildren()
+    .Select(c => c.Get<TrackingTargetModel>())
+    .ToArray();
+
+builder.Services.Configure<TrackingTargetConfiguration>(options => { options.TrackingTargets = trackingTargets; });
 
 builder.Services.AddHangfireContext(builder.Configuration.GetConnectionString("PriceTrackerHangfire"));
 builder.Services.AddHangfire(configuration =>

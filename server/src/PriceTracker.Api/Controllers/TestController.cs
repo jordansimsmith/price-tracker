@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using PriceTracker.Core.Interfaces;
 using PriceTracker.Core.Models;
 using PriceTracker.Infrastructure.Scraping;
 
@@ -10,21 +11,21 @@ namespace PriceTracker.Api.Controllers;
 public class TestController : ControllerBase
 {
     private readonly ILogger<TestController> _logger;
-    private readonly IEnumerable<TrackingTargetModel> _trackingTargetConfigurations;
+    private readonly IPriceScraperFactory _priceScraperFactory;
 
-    public TestController(ILogger<TestController> logger, IOptions<TrackingTargetConfiguration> trackingTargetConfigurationOptions)
+    public TestController(ILogger<TestController> logger, IPriceScraperFactory priceScraperFactory)
     {
         _logger = logger;
-        _trackingTargetConfigurations = trackingTargetConfigurationOptions.Value.TrackingTargets;
+        _priceScraperFactory = priceScraperFactory;
     }
 
     [HttpGet("/test")]
     public async Task<ActionResult> TestAsync()
     {
-        const string pageUrl = @"https://www.chemistwarehouse.co.nz/buy/98676/inc-100-dynamic-whey-cookies-and-cream-flavour-2kg";
-        var chemistWarehousePriceScraper = new ChemistWarehousePriceScraper(pageUrl);
-        var price = await chemistWarehousePriceScraper.ScrapePriceAsync();
-        
-        return Ok(_trackingTargetConfigurations);
+        var scrapers = _priceScraperFactory.CreatePriceScrapers();
+
+        var prices = await Task.WhenAll(scrapers.Select(s => s.ScrapePriceAsync()));
+       
+        return Ok(prices);
     }
 }
