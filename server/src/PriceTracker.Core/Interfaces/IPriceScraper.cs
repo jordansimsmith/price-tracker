@@ -1,4 +1,4 @@
-namespace PriceTracker.Core;
+namespace PriceTracker.Core.Interfaces;
 
 public interface IPriceScraper
 {

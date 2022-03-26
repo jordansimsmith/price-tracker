@@ -4,18 +4,25 @@ using PriceTracker.Core.Models;
 
 namespace PriceTracker.Core.Services;
 
-public class PriceScraperService : IPriceScraperService
+public class PriceTrackerService : IPriceTrackerService
 {
-    private readonly ILogger<IPriceScraperService> _logger;
+    private readonly ILogger<IPriceTrackerService> _logger;
     private readonly IPriceScraperFactory _priceScraperFactory;
 
-    public PriceScraperService(IPriceScraperFactory priceScraperFactory, ILogger<IPriceScraperService> logger)
+    public PriceTrackerService(IPriceScraperFactory priceScraperFactory, ILogger<IPriceTrackerService> logger)
     {
         _priceScraperFactory = priceScraperFactory;
         _logger = logger;
     }
 
-    public async Task<IEnumerable<PriceScrapeResult>> ScrapePricesAsync()
+    public async Task TrackPricesAsync()
+    {
+        var scrapeResults = await ScrapePricesAsync();
+
+        // TODO: compare against previous prices, save to db, dispatch email report
+    }
+
+    private async Task<IEnumerable<PriceScrapeResult>> ScrapePricesAsync()
     {
         var scrapers = _priceScraperFactory.CreatePriceScrapers();
 
@@ -38,7 +45,8 @@ public class PriceScraperService : IPriceScraperService
 
         var successfulPriceResults = priceResults
             .Where(result => result is not null)
-            .Select(result => result!);
+            .Select(result => result!)
+            .ToArray();
 
         return successfulPriceResults;
     }

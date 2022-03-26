@@ -2,6 +2,7 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
 using PriceTracker.Core;
+using PriceTracker.Core.Interfaces;
 using PriceTracker.Core.Models;
 using PriceTracker.Infrastructure;
 using PriceTracker.Infrastructure.Data;
@@ -72,5 +73,7 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
 });
 
 app.MapControllers();
+
+RecurringJob.AddOrUpdate<IPriceTrackerService>(x => x.TrackPricesAsync(), Cron.Daily);
 
 app.Run();

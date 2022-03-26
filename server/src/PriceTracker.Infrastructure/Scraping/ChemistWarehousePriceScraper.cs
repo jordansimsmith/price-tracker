@@ -1,4 +1,5 @@
 using PriceTracker.Core;
+using PriceTracker.Core.Interfaces;
 
 namespace PriceTracker.Infrastructure.Scraping;
 

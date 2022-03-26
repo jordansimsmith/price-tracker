@@ -8,7 +8,7 @@ public static class ServiceExtensions
 {
     public static IServiceCollection AddCoreServices(this IServiceCollection services)
     {
-        services.AddScoped<IPriceScraperService, PriceScraperService>();
+        services.AddScoped<IPriceTrackerService, PriceTrackerService>();
 
         return services;
     }
