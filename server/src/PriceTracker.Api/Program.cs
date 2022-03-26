@@ -1,6 +1,7 @@
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
+using PriceTracker.Core;
 using PriceTracker.Core.Models;
 using PriceTracker.Infrastructure;
 using PriceTracker.Infrastructure.Data;
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddPriceTrackerContext(builder.Configuration.GetConnectionString("PriceTracker"));
 builder.Services.AddInfrastructureServices();
+builder.Services.AddCoreServices();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

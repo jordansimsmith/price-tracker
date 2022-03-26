@@ -1,12 +1,10 @@
-using System.Transactions;
-using AngleSharp;
 using PriceTracker.Core;
 
 namespace PriceTracker.Infrastructure.Scraping;
 
 public class ChemistWarehousePriceScraper : BasePriceScraper, IPriceScraper
 {
-    public ChemistWarehousePriceScraper(string pageUrl) : base(pageUrl)
+    public ChemistWarehousePriceScraper(Guid uniqueId, string name, string pageUrl) : base(uniqueId, name, pageUrl)
     {
     }
 
@@ -30,7 +28,7 @@ public class ChemistWarehousePriceScraper : BasePriceScraper, IPriceScraper
         {
             throw new SystemException("Could not extract the price from the element");
         }
-        
+
         return price;
     }
 }

@@ -10,22 +10,19 @@ namespace PriceTracker.Api.Controllers;
 [Route("[controller]")]
 public class TestController : ControllerBase
 {
-    private readonly ILogger<TestController> _logger;
-    private readonly IPriceScraperFactory _priceScraperFactory;
 
-    public TestController(ILogger<TestController> logger, IPriceScraperFactory priceScraperFactory)
+    private readonly IPriceScraperService _priceScraperService;
+
+    public TestController(IPriceScraperService priceScraperService)
     {
-        _logger = logger;
-        _priceScraperFactory = priceScraperFactory;
+        _priceScraperService = priceScraperService;
     }
 
     [HttpGet("/test")]
     public async Task<ActionResult> TestAsync()
     {
-        var scrapers = _priceScraperFactory.CreatePriceScrapers();
-
-        var prices = await Task.WhenAll(scrapers.Select(s => s.ScrapePriceAsync()));
+        var results = await _priceScraperService.ScrapePricesAsync();
        
-        return Ok(prices);
+        return Ok(results);
     }
 }

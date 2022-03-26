@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using PriceTracker.Core;
 using PriceTracker.Core.Interfaces;
 using PriceTracker.Infrastructure.Data;
 using PriceTracker.Infrastructure.Scraping;

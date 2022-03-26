@@ -25,14 +25,14 @@ public class PriceScraperFactory: IPriceScraperFactory
                 switch (target.Type)
                 {
                     case nameof(ChemistWarehousePriceScraper):
-                        return new ChemistWarehousePriceScraper(target.PageUrl) as IPriceScraper;
+                        return new ChemistWarehousePriceScraper(target.UniqueId, target.Name, target.PageUrl) as IPriceScraper;
                     default:
                         _logger.LogWarning(
                             "No scraping implementation found for tracking target type <{type}>", target.Type);
                         return null;
                 }
             })
-            .Where(target => target != null)
+            .Where(target => target is not null)
             .Select(target => target!);
     }
 }

@@ -5,11 +5,21 @@ namespace PriceTracker.Infrastructure.Scraping;
 
 public abstract class BasePriceScraper
 {
-    protected readonly string PageUrl;
+    public Guid UniqueId { get; }
+    public string Name { get; }
+    public string PageUrl { get; }
 
-    protected BasePriceScraper(string pageUrl)
+    protected BasePriceScraper(Guid uniqueId, string name, string pageUrl)
     {
+        if (uniqueId == Guid.Empty)
+        {
+            throw new ArgumentException("UniqueId is empty");
+        }
+        ArgumentNullException.ThrowIfNull(name);
         ArgumentNullException.ThrowIfNull(pageUrl);
+
+        UniqueId = uniqueId;
+        Name = name;
         PageUrl = pageUrl;
     }
 
