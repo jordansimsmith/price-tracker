@@ -17,13 +17,23 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var trackingTargets = builder.Configuration
-    .GetSection("TrackingTargets")
-    .GetChildren()
-    .Select(c => c.Get<TrackingTargetModel>())
-    .ToArray();
+builder.Services.Configure<TrackingTargetConfiguration>(options =>
+{
+    options.TrackingTargets = builder.Configuration
+        .GetSection("TrackingTargets")
+        .GetChildren()
+        .Select(c => c.Get<TrackingTargetModel>())
+        .ToArray();
+});
 
-builder.Services.Configure<TrackingTargetConfiguration>(options => { options.TrackingTargets = trackingTargets; });
+builder.Services.Configure<SubscriberConfiguration>(options =>
+{
+    options.Subscribers = builder.Configuration
+        .GetSection("Subscribers")
+        .GetChildren()
+        .Select(c => c.Get<SubscriberModel>())
+        .ToArray();
+});
 
 builder.Services.AddHangfireContext(builder.Configuration.GetConnectionString("PriceTrackerHangfire"));
 builder.Services.AddHangfire(configuration =>
