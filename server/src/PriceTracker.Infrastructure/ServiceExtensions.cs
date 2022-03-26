@@ -24,8 +24,9 @@ public static class ServiceExtensions
 
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
     {
+        services.AddScoped<IPriceHistoryRepository, PriceHistoryRepository>();
         services.AddScoped<IPriceScraperFactory, PriceScraperFactory>();
-
+        
         return services;
     }
 }
