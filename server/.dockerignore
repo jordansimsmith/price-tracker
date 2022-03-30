@@ -1,0 +1,7 @@
+Dockerfile
+PriceTracker.sln.DotSettings.user
+.gitignore
+.idea/
+.config/
+**/obj/
+**/bin/
