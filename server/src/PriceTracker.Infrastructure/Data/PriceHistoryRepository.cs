@@ -23,6 +23,16 @@ public class PriceHistoryRepository : IPriceHistoryRepository
 
     public async Task<IEnumerable<PriceHistory>> GetHistoryAsync()
     {
-        return await _context.PriceHistories.ToListAsync();
+        return await _context.PriceHistories
+            .OrderByDescending(p => p.Date)
+            .ToListAsync();
+    }
+
+    public Task<PriceHistory?> FindLatestOrDefault(Guid uniqueId)
+    {
+        return _context.PriceHistories
+            .Where(p => p.TargetUniqueId == uniqueId)
+            .OrderByDescending(p => p.Date)
+            .FirstOrDefaultAsync();
     }
 }

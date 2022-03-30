@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using PriceTracker.Core.Entities;
 using PriceTracker.Core.Interfaces;
 using PriceTracker.Core.Models;
 
@@ -8,18 +9,50 @@ public class PriceTrackerService : IPriceTrackerService
 {
     private readonly ILogger<IPriceTrackerService> _logger;
     private readonly IPriceScraperFactory _priceScraperFactory;
+    private readonly IPriceHistoryRepository _priceHistoryRepository;
+    private readonly IPriceChangeNotifier _priceChangeNotifier;
 
-    public PriceTrackerService(IPriceScraperFactory priceScraperFactory, ILogger<IPriceTrackerService> logger)
+    public PriceTrackerService(
+        IPriceScraperFactory priceScraperFactory,
+        ILogger<IPriceTrackerService> logger,
+        IPriceHistoryRepository priceHistoryRepository,
+        IPriceChangeNotifier priceChangeNotifier
+    )
     {
         _priceScraperFactory = priceScraperFactory;
         _logger = logger;
+        _priceHistoryRepository = priceHistoryRepository;
+        _priceChangeNotifier = priceChangeNotifier;
     }
 
     public async Task TrackPricesAsync()
     {
         var scrapeResults = await ScrapePricesAsync();
 
-        // TODO: compare against previous prices, save to db, dispatch email report
+        var priceChanges = new List<(PriceHistory current, PriceHistory previous)>();
+
+        foreach (var result in scrapeResults)
+        {
+            var current = new PriceHistory
+            {
+                Date = DateTime.UtcNow,
+                Price = result.Price,
+                TargetName = result.Name,
+                TargetPageUrl = result.PageUrl,
+                TargetUniqueId = result.UniqueId,
+            };
+
+            var previous = await _priceHistoryRepository.FindLatestOrDefault(result.UniqueId);
+
+            await _priceHistoryRepository.AddAsync(current);
+
+            if (previous != null && previous.Price != current.Price)
+            {
+                priceChanges.Add((current, previous));
+            }
+        }
+
+        await _priceChangeNotifier.NotifySubscribers(priceChanges);
     }
 
     private async Task<IEnumerable<PriceScrapeResult>> ScrapePricesAsync()

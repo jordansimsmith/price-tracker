@@ -7,4 +7,6 @@ public interface IPriceHistoryRepository
     Task<PriceHistory> AddAsync(PriceHistory priceHistory);
 
     Task<IEnumerable<PriceHistory>> GetHistoryAsync();
+
+    Task<PriceHistory?> FindLatestOrDefault(Guid uniqueId);
 }
