@@ -1,0 +1,37 @@
+<html>
+<head>
+    <title>Price changes</title>
+</head>
+<body>
+Hello {{name}},
+
+<p>
+    There are changes to the prices of products that you are tracking.
+</p>
+
+<br/>
+<hr/>
+{{#each price_changes}}
+
+<ul>
+
+    <li>Name: <a href="{{this.target_page_url}}">{{this.target_name}}</a></li>
+    <li>Previous price: ${{this.previous_price}}</li>
+    <li>Current price : ${{this.current_price}}</li>
+
+</ul>
+<hr/>
+{{/each}}
+
+<br/>
+
+<p>
+    Thanks for subscribing,
+</p>
+
+<p>
+    Price Tracker
+</p>
+
+</body>
+</html>
