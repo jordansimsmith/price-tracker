@@ -52,7 +52,10 @@ public class PriceTrackerService : IPriceTrackerService
             }
         }
 
-        await _priceChangeNotifier.NotifySubscribers(priceChanges);
+        if (priceChanges.Any())
+        {
+            await _priceChangeNotifier.NotifySubscribersAsync(priceChanges);
+        }
     }
 
     private async Task<IEnumerable<PriceScrapeResult>> ScrapePricesAsync()

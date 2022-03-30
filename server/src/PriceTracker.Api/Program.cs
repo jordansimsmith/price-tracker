@@ -6,6 +6,7 @@ using PriceTracker.Core.Interfaces;
 using PriceTracker.Core.Models;
 using PriceTracker.Infrastructure;
 using PriceTracker.Infrastructure.Data;
+using PriceTracker.Infrastructure.Notifications;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +36,8 @@ builder.Services.Configure<SubscriberConfiguration>(options =>
         .Select(c => c.Get<SubscriberModel>())
         .ToArray();
 });
+
+builder.Services.Configure<SendGridConfiguration>(builder.Configuration.GetSection("SendGrid"));
 
 builder.Services.AddHangfireContext(builder.Configuration.GetConnectionString("PriceTrackerHangfire"));
 builder.Services.AddHangfire(configuration =>
