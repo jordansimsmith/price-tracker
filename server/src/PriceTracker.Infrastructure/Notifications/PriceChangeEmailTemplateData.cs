@@ -4,6 +4,7 @@ namespace PriceTracker.Infrastructure.Notifications;
 
 public class PriceChangeEmailTemplateData
 {
+    [JsonProperty("subject")] public string Subject { get; set; }
     [JsonProperty("name")] public string Name { get; set; }
     
     [JsonProperty("price_changes")] public IEnumerable<PriceChangeTemplateModel> PriceChanges { get; set; }

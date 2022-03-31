@@ -45,6 +45,7 @@ public class EmailPriceChangeNotifier : IPriceChangeNotifier
         // format the template data payload
         var templateData = new PriceChangeEmailTemplateData
         {
+            Subject = "Price changes",
             Name = subscriber.Name,
             PriceChanges = priceChanges.Select(pc =>
             {
@@ -64,7 +65,6 @@ public class EmailPriceChangeNotifier : IPriceChangeNotifier
         var message = new SendGridMessage
         {
             From = sender,
-            Subject = "Price Changes",
             TemplateId = _sendGridConfiguration.PriceChangeTemplateId
         };
         message.AddTo(recipient);
