@@ -1,6 +1,7 @@
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
+using PriceTracker.Api.Filters;
 using PriceTracker.Core;
 using PriceTracker.Core.Interfaces;
 using PriceTracker.Core.Models;
@@ -68,7 +69,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
-    IsReadOnlyFunc = _ => !app.Environment.IsDevelopment()
+    IsReadOnlyFunc = _ => !app.Environment.IsDevelopment(),
+    Authorization = new[]
+    {
+        new HangfireDashboardFilter(app.Configuration["Hangfire:Username"], app.Configuration["Hangfire:Password"])
+    }
 });
 
 app.MapControllers();
