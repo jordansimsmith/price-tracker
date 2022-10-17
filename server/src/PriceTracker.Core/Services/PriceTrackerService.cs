@@ -62,22 +62,34 @@ public class PriceTrackerService : IPriceTrackerService
     {
         var scrapers = _priceScraperFactory.CreatePriceScrapers();
 
-        var priceResults = await Task.WhenAll(scrapers.Select(async s =>
-        {
-            try
+        var priceResults = await Task.WhenAll(
+            scrapers.Select(async s =>
             {
-                var price = await s.ScrapePriceAsync();
-                _logger.LogInformation("Retrieved price <{price}> for <{uniqueId}> <{name}> <{pageUrl}>", price,
-                    s.UniqueId, s.Name, s.PageUrl);
-                return new PriceScrapeResult(s.UniqueId, s.Name, s.PageUrl, price);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Error retrieving price for <{uniqueId}> <{name}> <{pageUrl}>", s.UniqueId, s.Name,
-                    s.PageUrl);
-                return null;
-            }
-        }));
+                try
+                {
+                    var price = await s.ScrapePriceAsync();
+                    _logger.LogInformation(
+                        "Retrieved price <{price}> for <{uniqueId}> <{name}> <{pageUrl}>",
+                        price,
+                        s.UniqueId,
+                        s.Name,
+                        s.PageUrl
+                    );
+                    return new PriceScrapeResult(s.UniqueId, s.Name, s.PageUrl, price);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(
+                        e,
+                        "Error retrieving price for <{uniqueId}> <{name}> <{pageUrl}>",
+                        s.UniqueId,
+                        s.Name,
+                        s.PageUrl
+                    );
+                    return null;
+                }
+            })
+        );
 
         var successfulPriceResults = priceResults
             .Where(result => result is not null)

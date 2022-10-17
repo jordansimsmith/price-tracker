@@ -26,7 +26,9 @@ public class EmailPriceChangeNotifier : IPriceChangeNotifier
         _subscribers = subscriberOptions.Value.Subscribers;
     }
 
-    public async Task NotifySubscribersAsync(IEnumerable<(PriceHistory current, PriceHistory previous)> priceChanges)
+    public async Task NotifySubscribersAsync(
+        IEnumerable<(PriceHistory current, PriceHistory previous)> priceChanges
+    )
     {
         foreach (var subscriber in _subscribers)
         {
@@ -34,12 +36,17 @@ public class EmailPriceChangeNotifier : IPriceChangeNotifier
         }
     }
 
-    private async Task SendPriceChangeEmailAsync(SubscriberModel subscriber,
-        IEnumerable<(PriceHistory current, PriceHistory previous)> priceChanges)
+    private async Task SendPriceChangeEmailAsync(
+        SubscriberModel subscriber,
+        IEnumerable<(PriceHistory current, PriceHistory previous)> priceChanges
+    )
     {
         var client = new SendGridClient(_sendGridConfiguration.ApiKey);
 
-        var sender = new EmailAddress(_sendGridConfiguration.SenderAddress, _sendGridConfiguration.SenderName);
+        var sender = new EmailAddress(
+            _sendGridConfiguration.SenderAddress,
+            _sendGridConfiguration.SenderName
+        );
         var recipient = new EmailAddress(subscriber.Email, subscriber.Name);
 
         // format the template data payload
@@ -47,18 +54,20 @@ public class EmailPriceChangeNotifier : IPriceChangeNotifier
         {
             Subject = "Price changes",
             Name = subscriber.Name,
-            PriceChanges = priceChanges.Select(pc =>
-            {
-                var (current, previous) = pc;
-
-                return new PriceChangeTemplateModel
+            PriceChanges = priceChanges
+                .Select(pc =>
                 {
-                    CurrentPrice = current.Price,
-                    PreviousPrice = previous.Price,
-                    TargetName = current.TargetName,
-                    TargetPageUrl = current.TargetPageUrl
-                };
-            }).ToArray()
+                    var (current, previous) = pc;
+
+                    return new PriceChangeTemplateModel
+                    {
+                        CurrentPrice = current.Price,
+                        PreviousPrice = previous.Price,
+                        TargetName = current.TargetName,
+                        TargetPageUrl = current.TargetPageUrl
+                    };
+                })
+                .ToArray()
         };
 
         // configure the message

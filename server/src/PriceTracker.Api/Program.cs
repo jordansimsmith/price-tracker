@@ -62,7 +62,9 @@ builder.Services.Configure<SubscriberConfiguration>(options =>
 
 builder.Services.Configure<SendGridConfiguration>(builder.Configuration.GetSection("SendGrid"));
 
-builder.Services.AddHangfireContext(builder.Configuration.GetConnectionString("PriceTrackerHangfire"));
+builder.Services.AddHangfireContext(
+    builder.Configuration.GetConnectionString("PriceTrackerHangfire")
+);
 builder.Services.AddHangfire(configuration =>
 {
     configuration
@@ -89,13 +91,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHangfireDashboard("/hangfire", new DashboardOptions
-{
-    Authorization = new[]
+app.UseHangfireDashboard(
+    "/hangfire",
+    new DashboardOptions
     {
-        new HangfireDashboardFilter(app.Configuration["Hangfire:Username"], app.Configuration["Hangfire:Password"])
+        Authorization = new[]
+        {
+            new HangfireDashboardFilter(
+                app.Configuration["Hangfire:Username"],
+                app.Configuration["Hangfire:Password"]
+            )
+        }
     }
-});
+);
 
 app.MapControllers();
 

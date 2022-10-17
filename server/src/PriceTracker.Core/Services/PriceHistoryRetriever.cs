@@ -16,13 +16,16 @@ public class PriceHistoryRetriever : IPriceHistoryRetriever
     {
         var priceHistories = await _priceHistoryRepository.GetHistoryAsync();
 
-        return priceHistories.Select(p => new PriceHistoryModel
-        {
-            Date = p.Date,
-            Price = p.Price,
-            TargetName = p.TargetName,
-            TargetPageUrl = p.TargetPageUrl,
-            TargetUniqueId = p.TargetUniqueId
-        });
+        return priceHistories.Select(
+            p =>
+                new PriceHistoryModel
+                {
+                    Date = p.Date,
+                    Price = p.Price,
+                    TargetName = p.TargetName,
+                    TargetPageUrl = p.TargetPageUrl,
+                    TargetUniqueId = p.TargetUniqueId
+                }
+        );
     }
 }

@@ -12,26 +12,34 @@ namespace PriceTracker.Infrastructure.Data.Migrations
         {
             migrationBuilder.CreateTable(
                 name: "PriceHistories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Price = table.Column<decimal>(type: "numeric", nullable: false),
-                    TargetUniqueId = table.Column<Guid>(type: "uuid", nullable: false),
-                    TargetName = table.Column<string>(type: "text", nullable: false),
-                    TargetPageUrl = table.Column<string>(type: "text", nullable: false)
-                },
+                columns: table =>
+                    new
+                    {
+                        Id = table
+                            .Column<int>(type: "integer", nullable: false)
+                            .Annotation(
+                                "Npgsql:ValueGenerationStrategy",
+                                NpgsqlValueGenerationStrategy.IdentityByDefaultColumn
+                            ),
+                        Date = table.Column<DateTime>(
+                            type: "timestamp with time zone",
+                            nullable: false
+                        ),
+                        Price = table.Column<decimal>(type: "numeric", nullable: false),
+                        TargetUniqueId = table.Column<Guid>(type: "uuid", nullable: false),
+                        TargetName = table.Column<string>(type: "text", nullable: false),
+                        TargetPageUrl = table.Column<string>(type: "text", nullable: false)
+                    },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PriceHistories", x => x.Id);
-                });
+                }
+            );
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "PriceHistories");
+            migrationBuilder.DropTable(name: "PriceHistories");
         }
     }
 }

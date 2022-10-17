@@ -6,9 +6,7 @@ namespace PriceTracker.Infrastructure.Data;
 
 public class PriceTrackerContext : DbContext
 {
-    public PriceTrackerContext(DbContextOptions<PriceTrackerContext> options) : base(options)
-    {
-    }
+    public PriceTrackerContext(DbContextOptions<PriceTrackerContext> options) : base(options) { }
 
     public DbSet<PriceHistory> PriceHistories { get; set; }
 

@@ -10,17 +10,23 @@ namespace PriceTracker.Infrastructure;
 
 public static class ServiceExtensions
 {
-    public static IServiceCollection AddPriceTrackerContext(this IServiceCollection services, string connectionString)
+    public static IServiceCollection AddPriceTrackerContext(
+        this IServiceCollection services,
+        string connectionString
+    )
     {
         services.AddDbContext<PriceTrackerContext>(options => options.UseNpgsql(connectionString));
-        
+
         return services;
     }
 
-    public static IServiceCollection AddHangfireContext(this IServiceCollection services, string connectionString)
+    public static IServiceCollection AddHangfireContext(
+        this IServiceCollection services,
+        string connectionString
+    )
     {
         services.AddDbContext<HangfireContext>(options => options.UseNpgsql(connectionString));
-        
+
         return services;
     }
 
@@ -29,7 +35,7 @@ public static class ServiceExtensions
         services.AddScoped<IPriceHistoryRepository, PriceHistoryRepository>();
         services.AddScoped<IPriceScraperFactory, PriceScraperFactory>();
         services.AddScoped<IPriceChangeNotifier, EmailPriceChangeNotifier>();
-        
+
         return services;
     }
 }

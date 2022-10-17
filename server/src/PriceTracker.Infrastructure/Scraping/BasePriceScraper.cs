@@ -33,7 +33,7 @@ public abstract class BasePriceScraper
         {
             throw new SystemException($"Could not load the document for {PageUrl}");
         }
-        
+
         return document;
     }
 }

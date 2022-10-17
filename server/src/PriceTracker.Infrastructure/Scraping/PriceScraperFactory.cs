@@ -6,13 +6,15 @@ using PriceTracker.Core.Models;
 
 namespace PriceTracker.Infrastructure.Scraping;
 
-public class PriceScraperFactory: IPriceScraperFactory
+public class PriceScraperFactory : IPriceScraperFactory
 {
     private readonly IEnumerable<TrackingTargetModel> _trackingTargets;
     private readonly ILogger<PriceScraperFactory> _logger;
 
-    public PriceScraperFactory(IOptions<TrackingTargetConfiguration> trackingTargetsOptions,
-        ILogger<PriceScraperFactory> logger)
+    public PriceScraperFactory(
+        IOptions<TrackingTargetConfiguration> trackingTargetsOptions,
+        ILogger<PriceScraperFactory> logger
+    )
     {
         _logger = logger;
         _trackingTargets = trackingTargetsOptions.Value.TrackingTargets;
@@ -20,15 +22,22 @@ public class PriceScraperFactory: IPriceScraperFactory
 
     public IEnumerable<IPriceScraper> CreatePriceScrapers()
     {
-        return _trackingTargets.Select(target =>
+        return _trackingTargets
+            .Select(target =>
             {
                 switch (target.Type)
                 {
                     case nameof(ChemistWarehousePriceScraper):
-                        return new ChemistWarehousePriceScraper(target.UniqueId, target.Name, target.PageUrl) as IPriceScraper;
+                        return new ChemistWarehousePriceScraper(
+                                target.UniqueId,
+                                target.Name,
+                                target.PageUrl
+                            ) as IPriceScraper;
                     default:
                         _logger.LogWarning(
-                            "No scraping implementation found for tracking target type <{type}>", target.Type);
+                            "No scraping implementation found for tracking target type <{type}>",
+                            target.Type
+                        );
                         return null;
                 }
             })

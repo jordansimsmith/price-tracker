@@ -5,7 +5,7 @@ namespace PriceTracker.Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class PriceHistoryController: ControllerBase
+public class PriceHistoryController : ControllerBase
 {
     private readonly IPriceHistoryRetriever _priceHistoryRetriever;
 
@@ -17,7 +17,7 @@ public class PriceHistoryController: ControllerBase
     [HttpGet]
     public async Task<ActionResult> GetPriceHistoryAsync()
     {
-        var history =  await _priceHistoryRetriever.RetrievePriceHistoryAsync();
+        var history = await _priceHistoryRetriever.RetrievePriceHistoryAsync();
 
         return Ok(history);
     }
