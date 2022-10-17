@@ -1,6 +1,9 @@
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Resources;
 using PriceTracker.Api.Filters;
 using PriceTracker.Core;
 using PriceTracker.Core.Interfaces;
@@ -10,6 +13,25 @@ using PriceTracker.Infrastructure.Data;
 using PriceTracker.Infrastructure.Notifications;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.ClearProviders();
+builder.Logging.AddOpenTelemetry(options =>
+{
+    options.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("price-tracker-server"));
+
+    if (builder.Environment.IsDevelopment())
+    {
+        options.AddConsoleExporter();
+    }
+    else
+    {
+        options.AddOtlpExporter(o =>
+        {
+            o.Endpoint = new Uri(builder.Configuration["OpenTelemetry:Endpoint"]);
+            o.Protocol = OtlpExportProtocol.Grpc;
+        });
+    }
+});
 
 // Add services to the container.
 builder.Services.AddPriceTrackerContext(builder.Configuration.GetConnectionString("PriceTracker"));
