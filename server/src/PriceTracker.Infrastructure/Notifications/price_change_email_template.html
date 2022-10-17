@@ -14,11 +14,13 @@ Hello {{name}},
 {{#each price_changes}}
 
 <ul>
+    <li style="margin-bottom: 10px">Name: <a href="{{this.target_page_url}}">{{this.target_name}}</a></li>
 
-    <li>Name: <a href="{{this.target_page_url}}">{{this.target_name}}</a></li>
-    <li>Previous price: ${{this.previous_price}}</li>
     <li>Current price : ${{this.current_price}}</li>
+    <li style="margin-bottom: 10px">Current in stock: {{this.current_in_stock}}</li>
 
+    <li>Previous price: ${{this.previous_price}}</li>
+    <li>Previous in stock: {{this.previous_in_stock}}</li>
 </ul>
 <hr/>
 {{/each}}

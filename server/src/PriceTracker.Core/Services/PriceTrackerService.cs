@@ -40,13 +40,19 @@ public class PriceTrackerService : IPriceTrackerService
                 TargetName = result.Name,
                 TargetPageUrl = result.PageUrl,
                 TargetUniqueId = result.UniqueId,
+                InStock = result.InStock
             };
 
             var previous = await _priceHistoryRepository.FindLatestOrDefault(result.UniqueId);
 
             await _priceHistoryRepository.AddAsync(current);
 
-            if (previous != null && previous.Price != current.Price)
+            if (previous == null)
+            {
+                continue;
+            }
+
+            if (previous.Price != current.Price || previous.InStock != current.InStock)
             {
                 priceChanges.Add((current, previous));
             }
@@ -67,15 +73,15 @@ public class PriceTrackerService : IPriceTrackerService
             {
                 try
                 {
-                    var price = await s.ScrapePriceAsync();
+                    var result = await s.ScrapePriceAsync();
                     _logger.LogInformation(
                         "Retrieved price <{price}> for <{uniqueId}> <{name}> <{pageUrl}>",
-                        price,
+                        result.Price,
                         s.UniqueId,
                         s.Name,
                         s.PageUrl
                     );
-                    return new PriceScrapeResult(s.UniqueId, s.Name, s.PageUrl, price);
+                    return result;
                 }
                 catch (Exception e)
                 {

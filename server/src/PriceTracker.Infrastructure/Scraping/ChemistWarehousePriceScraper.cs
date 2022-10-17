@@ -1,5 +1,5 @@
-using PriceTracker.Core;
 using PriceTracker.Core.Interfaces;
+using PriceTracker.Core.Models;
 
 namespace PriceTracker.Infrastructure.Scraping;
 
@@ -8,7 +8,7 @@ public class ChemistWarehousePriceScraper : BasePriceScraper, IPriceScraper
     public ChemistWarehousePriceScraper(Guid uniqueId, string name, string pageUrl)
         : base(uniqueId, name, pageUrl) { }
 
-    public async Task<decimal> ScrapePriceAsync()
+    public async Task<PriceScrapeResult> ScrapePriceAsync()
     {
         var document = await LoadDocumentAsync();
 
@@ -29,6 +29,12 @@ public class ChemistWarehousePriceScraper : BasePriceScraper, IPriceScraper
             throw new SystemException("Could not extract the price from the element");
         }
 
-        return price;
+        var inStoreOnly =
+            document.QuerySelector("#product_images")?.QuerySelector("img[alt^=\"In store only\"]")
+                is not null;
+
+        var inStock = !inStoreOnly;
+
+        return new PriceScrapeResult(UniqueId, Name, PageUrl, price, inStock);
     }
 }

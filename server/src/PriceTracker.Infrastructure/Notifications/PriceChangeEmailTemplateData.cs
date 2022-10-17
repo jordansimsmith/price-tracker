@@ -27,4 +27,10 @@ public class PriceChangeTemplateModel
 
     [JsonProperty("current_price")]
     public decimal CurrentPrice { get; set; }
+
+    [JsonProperty("previous_in_stock")]
+    public bool PreviousInStock { get; set; }
+
+    [JsonProperty("current")]
+    public bool CurrentInStock { get; set; }
 }

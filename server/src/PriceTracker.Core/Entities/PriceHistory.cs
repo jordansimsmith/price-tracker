@@ -10,4 +10,5 @@ public class PriceHistory
     public Guid TargetUniqueId { get; set; }
     public string TargetName { get; set; }
     public string TargetPageUrl { get; set; }
+    public bool InStock { get; set; }
 }

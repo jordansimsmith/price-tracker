@@ -15,5 +15,6 @@ public class PriceHistoryConfiguration : IEntityTypeConfiguration<PriceHistory>
         builder.Property(o => o.TargetUniqueId).IsRequired();
         builder.Property(o => o.TargetName).IsRequired();
         builder.Property(o => o.TargetPageUrl).IsRequired();
+        builder.Property(o => o.InStock).IsRequired();
     }
 }

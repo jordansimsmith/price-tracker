@@ -1,3 +1,5 @@
+using PriceTracker.Core.Models;
+
 namespace PriceTracker.Core.Interfaces;
 
 public interface IPriceScraper
@@ -6,5 +8,5 @@ public interface IPriceScraper
     public string Name { get; }
     public string PageUrl { get; }
 
-    Task<decimal> ScrapePriceAsync();
+    Task<PriceScrapeResult> ScrapePriceAsync();
 }
