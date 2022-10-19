@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Resources;
+using PriceTracker.Api;
 using PriceTracker.Api.Filters;
 using PriceTracker.Core;
 using PriceTracker.Core.Interfaces;
@@ -15,23 +16,16 @@ using PriceTracker.Infrastructure.Notifications;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
-builder.Logging.AddOpenTelemetry(options =>
-{
-    options.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("price-tracker-server"));
 
-    if (builder.Environment.IsDevelopment())
-    {
-        options.AddConsoleExporter();
-    }
-    else
-    {
-        options.AddOtlpExporter(o =>
-        {
-            o.Endpoint = new Uri(builder.Configuration["OpenTelemetry:Endpoint"]);
-            o.Protocol = OtlpExportProtocol.Grpc;
-        });
-    }
-});
+builder.Logging.AddOpenTelemetryLogging(
+    builder.Environment,
+    builder.Configuration["OpenTelemetry:Endpoint"]
+);
+
+builder.Services.AddOpenTelemetryTracing(
+    builder.Environment,
+    builder.Configuration["OpenTelemetry:Endpoint"]
+);
 
 // Add services to the container.
 builder.Services.AddPriceTrackerContext(builder.Configuration.GetConnectionString("PriceTracker"));
