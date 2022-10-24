@@ -64,7 +64,9 @@ public class EmailPriceChangeNotifier : IPriceChangeNotifier
                         CurrentPrice = current.Price,
                         PreviousPrice = previous.Price,
                         TargetName = current.TargetName,
-                        TargetPageUrl = current.TargetPageUrl
+                        TargetPageUrl = current.TargetPageUrl,
+                        CurrentInStock = current.InStock,
+                        PreviousInStock = previous.InStock
                     };
                 })
                 .ToArray()

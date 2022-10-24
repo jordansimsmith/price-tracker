@@ -31,6 +31,6 @@ public class PriceChangeTemplateModel
     [JsonProperty("previous_in_stock")]
     public bool PreviousInStock { get; set; }
 
-    [JsonProperty("current")]
+    [JsonProperty("current_in_stock")]
     public bool CurrentInStock { get; set; }
 }
